@@ -12,9 +12,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin-bottom: 50px">
         <div class="container">
-            <span class="navbar-brand mb-0 h1">Start With Little Smile</span>
+            <span class="navbar-brand mb-0 h1">How To Start Your Day: Start With A Little Smile</span>
             <button class="btn btn-outline-danger ml-auto" id="btn-logout" onclick="logOut()">Logout</button>
         </div>
     </nav>
@@ -96,16 +96,20 @@
                     <img src="https://wearecovert.com/wp-content/uploads/2020/03/Covid-19-4k-1-scaled.jpg"
                         class="card-img">
                     <div class="card-img-overlay">
-                        <h2 class="card-title">Title</h2>
-                        <p id="title-local" class="card-text">Berita Lokal</p>
-                        <h3 class="card-title">Abstract</h3>
-                        <p id="abstract-local" class="card-text">Isi Abstract</p>
-                        <h4 class="card-title">Tumbnail</h4>
-                        <p id="tumbnail-local" class="card-text">Isi Tumbnail</p>
+                        <h4 class="card-title">New Confirmed: </h4>
+                        <p id="new-confirmed" class="card-text">Berita Lokal</p>
+                        <h4 class="card-title">Total Confirmed: </h4>
+                        <p id="total-confirmed" class="card-text">Isi Abstract</p>
+                        <h4 class="card-title">New Deaths: </h4>
+                        <p id="new-deaths" class="card-text">Isi Tumbnail</p>
+                        <h4 class="card-title">New Confirmed: </h4>
+                        <p id="total-deaths" class="card-text">Berita Lokal</p>
+                        <h4 class="card-title">Total Confirmed: </h4>
+                        <p id="new-recovered" class="card-text">Isi Abstract</p>
+                        <h4 class="card-title">New Deaths: </h4>
+                        <p id="total-recovered" class="card-text">Isi Tumbnail</p>
                     </div>
                 </div>
-                <button id="btn-refresh-local" style="margin: 5%" type="submit"
-                    class="btn btn-outline-primary ml-auto" >Refresh</button>
             </div>
         </div>
     </div>
@@ -130,6 +134,7 @@
             $("#main-page").show()
             $("#btn-logout").show()
             fetchNews()
+            fetchCovid()
         }
 
         function showRegisterPage() {
@@ -218,7 +223,7 @@
                 })
         }
 
-        function fetchNews(){
+        function fetchNews() {
 
             let urls = [
             "http://localhost:3000/domnews",
@@ -231,17 +236,40 @@
                     'access_token': localStorage.getItem('access_token'),
                 }
             })
-            .done(response=>{
-                console.log(response);
+            .done(response => {
+                // console.log(response);
                 $("#title-global").text(response.title)
                 $("#abstract-global").text(response.abstract)
                 $("#url-global").attr('href', response.url)
                 $("#thumbnail").attr('src', response.thumbnail_standard);
             })
-            .fail((xhr,textStatus)=>{
-                console.log(xhr,textStatus);
+            .fail((xhr, textStatus)=>{
+                console.log(xhr, textStatus);
             })
             .always()
+        }
+
+        function fetchCovid() {
+            console.log('fetch')
+            $.ajax({
+                url: 'http://localhost:3000/covid',
+                method: 'GET',
+                headers: {
+                    'access_token': localStorage.getItem('access_token')
+                }
+            })
+                .done(response => {
+                    // console.log(response)
+                    $("#new-confirmed").text(response.NewConfirmed)
+                    $("#total-confirmed").text(response.TotalConfirmed)
+                    $("#new-deaths").text(response.NewDeaths)
+                    $("#total-deaths").text(response.TotalDeaths)
+                    $("#new-recovered").text(response.NewRecovered)
+                    $("#total-recovered").text(response.TotalRecovered)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
 
 
