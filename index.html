@@ -186,20 +186,24 @@
         }
 
         function fetchNews(){
-            console.log(localStorage.getItem('access_token'));
+
+            let urls = [
+            "http://localhost:3000/domnews",
+            "http://localhost:3000/news"
+            ]
             $.ajax({
                 method:"GET",
-                url: "http://localhost:3000/domnews",
+                url: urls[Math.round(Math.random())],
                 headers: {
                     'access_token': localStorage.getItem('access_token'),
                 }
             })
             .done(response=>{
+                console.log(response);
                 $("#title-global").text(response.title)
                 $("#abstract-global").text(response.abstract)
                 $("#url-global").attr('href', response.url)
                 $("#thumbnail").attr('src', response.thumbnail_standard);
-
             })
             .fail((xhr,textStatus)=>{
                 console.log(xhr,textStatus);
