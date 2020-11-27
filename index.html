@@ -68,20 +68,20 @@
     <div id="main-page" class="container">
         <div class="row">
             <div class="col" id="global-news">
+                <a id="url-global" href="" target="_blank">
                 <div class="card bg-dark text-white">
-                    <img src="https://www.teahub.io/photos/full/124-1244610_photo-wallpaper-usa-press-new-york-the-new.jpg"
+                    <img id="thumbnail" src="https://www.teahub.io/photos/full/124-1244610_photo-wallpaper-usa-press-new-york-the-new.jpg"
                         class="card-img" alt="...">
                     <div class="card-img-overlay">
                         <h2 class="card-title">Title</h2>
                         <p id="title-global" class="card-text">We Hope This App Can Help Make Your Day</p>
                         <h3 class="card-title">Abstract</h3>
                         <p id="abstract-global" class="card-text">Isi Abstract</p>
-                        <h4 class="card-title">Tumbnail</h4>
-                        <p id="tumbnail-global" class="card-text">Isi Tumbnail</p>
                     </div>
                 </div>
+                </a>
                 <button id="btn-refresh-global" style="margin: 5%" type="submit"
-                    class="btn btn-outline-primary ml-auto">Refresh</button>
+                    class="btn btn-outline-primary ml-auto" onclick="fetchNews()">Refresh</button>
             </div>
             <div class="col" id="local-news">
                 <div class="card bg-dark text-white">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <button id="btn-refresh-local" style="margin: 5%" type="submit"
-                    class="btn btn-outline-primary ml-auto">Refresh</button>
+                    class="btn btn-outline-primary ml-auto" >Refresh</button>
             </div>
         </div>
     </div>
@@ -119,6 +119,7 @@
             hideAll()
             $("#main-page").show()
             $("#btn-logout").show()
+            fetchNews()
         }
 
         function showRegisterPage() {
@@ -184,6 +185,29 @@
             showLoginPage();
         }
 
+        function fetchNews(){
+            console.log(localStorage.getItem('access_token'));
+            $.ajax({
+                method:"GET",
+                url: "http://localhost:3000/domnews",
+                headers: {
+                    'access_token': localStorage.getItem('access_token'),
+                }
+            })
+            .done(response=>{
+                $("#title-global").text(response.title)
+                $("#abstract-global").text(response.abstract)
+                $("#url-global").attr('href', response.url)
+                $("#thumbnail").attr('src', response.thumbnail_standard);
+
+            })
+            .fail((xhr,textStatus)=>{
+                console.log(xhr,textStatus);
+            })
+            .always()
+        }
+
+
         $(document).ready(() => {
             if (localStorage.getItem('access_token')) {
                 showMainPage()
@@ -203,6 +227,7 @@
                 e.preventDefault()
                 register();
             }))
+            
         })
     </script>
 </body>
