@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <span class="navbar-brand mb-0 h1">Start With Little Smile</span>
-            <button class="btn btn-outline-danger ml-auto" id="btn-logout">Logout</button>
+            <button class="btn btn-outline-danger ml-auto" id="btn-logout" onclick="logOut()">Logout</button>
         </div>
     </nav>
 
@@ -134,7 +134,6 @@
                 }
             })
             .done((response) => {
-                console.log(response);
                 localStorage.setItem('access_token', response.access_token)
                 showMainPage()
             })
@@ -148,8 +147,11 @@
 
         }
 
-        function register(){
+        function register(){}
             
+        function logOut(){
+            localStorage.removeItem('access_token')
+            showLoginPage();
         }
 
         $(document).ready(() => {
