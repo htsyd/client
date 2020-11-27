@@ -121,6 +121,11 @@
             $("#btn-logout").show()
         }
 
+        function showRegisterPage() {
+            hideAll()
+            $("#register-page").show();
+        }
+
         function login() {
             const email = $("#email-input").val()
             const password = $("#password-input").val()
@@ -133,23 +138,48 @@
                     password
                 }
             })
-            .done((response) => {
-                localStorage.setItem('access_token', response.access_token)
-                showMainPage()
-            })
-            .fail((xhr, textStatus) => {
-                console.log(xhr);
-            })
-            .always(_ => {
-                $("#email-input").val("")
-                $("#password-input").val("")
-            })
+                .done((response) => {
+                    localStorage.setItem('access_token', response.access_token)
+                    showMainPage()
+                })
+                .fail((xhr, textStatus) => {
+                    console.log(xhr);
+                })
+                .always(_ => {
+                    $("#email-input").val("")
+                    $("#password-input").val("")
+                })
 
         }
 
-        function register(){}
-            
-        function logOut(){
+        function register() {
+            const name = $("#name-register").val();
+            const email = $("#email-register").val();
+            const password = $("#password-register").val();
+
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:3000/register",
+                data: {
+                    name,
+                    email,
+                    password
+                }
+            })
+                .done(_=>{
+                    showLoginPage()
+                })
+                .fail((xhr, textStatus)=>{
+                    console.log(xhr,textStatus);
+                })
+                .always(_ => {
+                    $("#name-register").val("");
+                    $("#email-register").val("");
+                    $("#password-register").val("");
+                })
+        }
+
+        function logOut() {
             localStorage.removeItem('access_token')
             showLoginPage();
         }
@@ -163,6 +193,16 @@
                 e.preventDefault();
                 login()
             })
+
+            $("#btn-register").on('click', (e) => {
+                e.preventDefault();
+                showRegisterPage()
+            })
+
+            $("#register-form").on('submit', (e => {
+                e.preventDefault()
+                register();
+            }))
         })
     </script>
 </body>
